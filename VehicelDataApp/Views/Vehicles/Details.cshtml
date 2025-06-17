@@ -1,0 +1,18 @@
+﻿@model VehicelDataApp.Models.Vehicle
+@{
+    ViewData["Title"] = "Detail Data Kendaraan";
+}
+
+<h4 class="fw-bold mt-3">@ViewData["Title"]</h4>
+
+<div>
+    <p><strong>No. Registrasi Kendaraan:</strong> @Model.NomorRegistrasi</p>
+    <p><strong>Nama Pemilik:</strong> @Model.NamaPemilik</p>
+    <p><strong>Merk Kendaraan:</strong> @Model.MerkKendaraan</p>
+    <p><strong>Alamat Pemilik:</strong> @Model.Alamat</p>
+    <p><strong>Tahun Pembuatan:</strong> @Model.TahunPembuatan</p>
+    <p><strong>Kapasitas Silinder:</strong> @Model.KapasitasSilinder</p>
+    <p><strong>Warna Kendaraan:</strong> @Model.WarnaKendaraan</p>
+    <p><strong>Bahan Bakar:</strong> @Model.BahanBakar</p>
+</div>
+<a asp-action="Index" class="btn btn-secondary">Kembali</a>

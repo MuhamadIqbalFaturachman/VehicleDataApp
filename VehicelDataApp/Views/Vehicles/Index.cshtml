@@ -1,0 +1,152 @@
+﻿@model IEnumerable<VehicelDataApp.Models.Vehicle>
+@{
+    ViewData["Title"] = "Aplikasi Data Kendaraan";
+    var request = Context.Request;
+}
+
+<style>
+    .filter-box {
+        background-color: #fde9e0;
+        padding: 20px;
+        border: 1px solid #f0a591;
+        margin-bottom: 20px;
+    }
+
+    .table th {
+        background-color: #cfd8e6;
+        text-align: center;
+    }
+
+    .table td {
+        text-align: center;
+    }
+
+    .btn-search, .btn-add {
+        background-color: #3c5aa6;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        margin-right: 5px;
+    }
+
+    .action-links a {
+        margin-right: 8px;
+    }
+
+        .action-links a:nth-child(1) {
+            color: orange;
+        }
+
+        .action-links a:nth-child(2) {
+            color: black;
+        }
+
+        .action-links a:nth-child(3) {
+            color: red;
+        }
+</style>
+<div class="filter-box">
+    <form asp-action="Index" method="get" class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">No Registrasi</label>
+            <input type="text" name="noReg" value="@request.Query["noReg"]" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Nama Pemilik</label>
+            <input type="text" name="namaPemilik" value="@request.Query["namaPemilik"]" class="form-control" />
+        </div>
+        <div class="col-md-4 align-self-end">
+            <button type="submit" class="btn btn-search">Search</button>
+            <a asp-action="Create" class="btn btn-add">Add</a>
+        </div>
+    </form>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>No Registrasi</th>
+            <th>Nama Pemilik</th>
+            <th>Merk Kendaraan</th>
+            <th>Tahun Pembuatan</th>
+            <th>Kapasitas</th>
+            <th>Warna</th>
+            <th>Bahan Bakar</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@i</td>
+                <td>@item.NomorRegistrasi</td>
+                <td>@item.NamaPemilik</td>
+                <td>@item.MerkKendaraan</td>
+                <td>@item.TahunPembuatan</td>
+                <td>@item.KapasitasSilinder cc</td>
+                <td>@item.WarnaKendaraan</td>
+                <td>@item.BahanBakar</td>
+                <td class="action-links">
+                    <a asp-action="Details" asp-route-id="@item.NomorRegistrasi">Detail</a>
+                    <a asp-action="Edit" asp-route-id="@item.NomorRegistrasi">Edit</a>
+                    <a href="#" class="btn-delete" data-id="@item.NomorRegistrasi">Delete</a>
+                </td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table>
+
+<!-- Javascript -->
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-delete').click(function (e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+
+                Swal.fire({
+                    title: 'Yakin ingin menghapus?',
+                    text: "Data akan dihapus secara permanen.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/Vehicles/Delete',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function (response) {
+                                Swal.fire(
+                                    'Terhapus!',
+                                    response.message,
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            },
+                            error: function () {
+                                Swal.fire(
+                                    'Gagal!',
+                                    'Data gagal dihapus.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,114 @@
+﻿@model VehicelDataApp.Models.Vehicle
+@{
+    ViewData["Title"] = "Edit Data Kendaraan";
+}
+
+<h4 class="fw-bold mt-3">@ViewData["Title"]</h4>
+
+<form id="form-edit" asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">No. Registrasi Kendaraan</label>
+                    <input asp-for="NomorRegistrasi" class="form-control" readonly />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nama Pemilik</label>
+                    <input asp-for="NamaPemilik" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Merk Kendaraan</label>
+                    <input asp-for="MerkKendaraan" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Alamat Pemilik Kendaraan</label>
+                    <textarea asp-for="Alamat" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Tahun Pembuatan</label>
+                    <input asp-for="TahunPembuatan" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kapasitas Silinder</label>
+                    <input asp-for="KapasitasSilinder" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Warna Kendaraan</label>
+                    <select asp-for="WarnaKendaraan" class="form-control">
+                        <option value="">Pilih Warna</option>
+                        <option>Merah</option>
+                        <option>Hitam</option>
+                        <option>Biru</option>
+                        <option>Abu-Abu</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Bahan Bakar</label>
+                    <input asp-for="BahanBakar" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Tombol Simpan & Kembali -->
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Ubah</button>
+            <a asp-action="Index" class="btn btn-secondary">Kembali</a>
+        </div>
+    </div>
+</form>
+
+<!-- Javascript -->
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#form-edit').submit(function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var formData = form.serialize();
+
+                Swal.fire({
+                    title: 'Simpan Perubahan?',
+                    text: "Perubahan data akan disimpan.",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, simpan!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: form.attr('action'),
+                            type: 'POST',
+                            data: formData,
+                            success: function (response) {
+                                Swal.fire(
+                                    'Berhasil!',
+                                    'Data kendaraan berhasil diubah!',
+                                    'success'
+                                ).then(() => {
+                                    window.location.href = '/Vehicles/Index';
+                                });
+                            },
+                            error: function (xhr) {
+                                Swal.fire(
+                                    'Gagal!',
+                                    'Gagal mengubah data. Periksa kembali input!',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
