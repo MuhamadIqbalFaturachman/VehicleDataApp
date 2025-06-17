@@ -38,7 +38,7 @@
         }
 
         .action-links a:nth-child(2) {
-            color: black;
+            color: blue;
         }
 
         .action-links a:nth-child(3) {
@@ -113,7 +113,7 @@
                 var id = $(this).data('id');
 
                 Swal.fire({
-                    title: 'Yakin ingin menghapus?',
+                    title: `Yakin ingin menghapus data ${id}?`,
                     text: "Data akan dihapus secara permanen.",
                     icon: 'warning',
                     showCancelButton: true,
